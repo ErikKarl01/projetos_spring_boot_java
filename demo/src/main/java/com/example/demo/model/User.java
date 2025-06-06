@@ -1,12 +1,23 @@
-package com.example.demo.dto;
+package com.example.demo.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.util.Date;
 
-import com.example.demo.model.User;
+import com.example.demo.dto.UserDTO;
 
-/*O DTO é um objeto usado para a circulação de dados na aplicação, principalmente entre o cliente e o 
-servidor, sem expor diretamente os detalhes da entidade do banco de dados.*/
+/*Aqui será criado o repositório do databese user, servindo como uma interface entre o banco de dados e 
+ * a aplicação, aqui é onde o modelo da tabela será definido, assim como algumas regras de negócio e 
+ * validações referentes a dados
+*/
 
-public class UserDTO {
+@Entity
+public class User {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nome;
     private String cpf;
@@ -15,16 +26,6 @@ public class UserDTO {
     private String telefone;
     private Date dataCadastro;
 
-    public UserDTO() {
-        // Construtor padrão
-    }
-
-    public UserDTO(Long id, String nome, String cpf) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-    }
-    
     public long getId() {
         return id;
     }
@@ -64,19 +65,19 @@ public class UserDTO {
     public Date getDataCadastro() {
         return dataCadastro;
     }
-    public void setDataCadastro(Date dataCadastro) {
-        this.dataCadastro = dataCadastro;
+    public void setDataCadastro(Date data_cadastro) {
+        this.dataCadastro = data_cadastro;
     }
+    
+    public static User convert(UserDTO userDTO){
+        User user = new User();
+        user.setNome(userDTO.getNome());
+        user.setCpf(userDTO.getCpf());
+        user.setEndereco(userDTO.getEndereco());
+        user.setEmail(userDTO.getEmail());
+        user.setTelefone(userDTO.getTelefone());
+        user.setDataCadastro(userDTO.getDataCadastro());
 
-    public static UserDTO convert(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setNome(user.getNome());
-        userDTO.setEndereco(user.getEndereco());
-        userDTO.setCpf(user.getCpf());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setTelefone(user.getTelefone());
-        userDTO.setDataCadastro(user.getDataCadastro());
-        return userDTO;
+        return user;
     }
-
 }
